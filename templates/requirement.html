@@ -1,0 +1,111 @@
+{% extends 'layout.html' %} {% block body %}
+
+<style>
+
+    html body {
+      background-color: rgb(206, 206, 228);
+  }
+  .button-41 {
+  background-color: initial;
+  background-image: linear-gradient(-180deg, #00D775, #00BD68);
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Inter,-apple-system,system-ui,Roboto,"Helvetica Neue",Arial,sans-serif;
+  height: 44px;
+  line-height: 44px;
+  outline: 0;
+  overflow: hidden;
+  padding: 0 20px;
+  pointer-events: auto;
+  position: relative;
+  text-align: center;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: top;
+  white-space: nowrap;
+  width: 100%;
+  z-index: 9;
+  border: 0;
+}
+
+.button-41:hover {
+  background: #00bd68;
+}
+</style>
+<!--Form Section-->
+<br /><br />
+<h2 style="text-align: center; margin: 0px; color: black">
+  <b>Find out the requirement of condition to grow crop in your farm</b>
+</h2>
+<br />
+
+<div
+  style="
+    width: 350px;
+    height: 50rem;
+    margin: 0px auto;
+    color: black;
+    border-radius: 25px;
+    padding: 10px 10px;
+  "
+>
+  <form method="POST" action="{{ url_for('crop_requirement') }}">
+    <div class="form-group">
+      <label for="Crop" style="font-size: 17px "><b>Crop</b></label>
+      <select
+        onchange="print_city('state', this.selectedIndex);"
+        id="sts"
+        name="crop"
+        class="form-control"
+        style="font-weight: bold; color: black;"
+
+        required
+      ></select>
+      <script language="javascript">
+        print_state("sts");
+      </script>
+    </div>
+    <!-- <div class="form-group">
+      <label for="State" style="font-size: 17px "><b>State</b></label>
+      <select
+        onchange="print_city('city', this.selectedIndex);"
+        id="state"
+        name="state"
+        class="form-control"
+        style="font-weight: bold; color: black;"
+        required
+      ></select>
+      <script language="javascript">
+        print_state("state");
+      </script> -->
+
+    <div class="d-flex justify-content-center">
+      <button
+        type="submit"
+        class="btn btn-info button-41"
+        
+        role="button"
+      >
+        Predict
+      </button>
+
+      
+    </div>
+  </form>
+</div>
+
+
+
+<!-- Form section -->
+
+{% endblock %}
+
+
+<!-- HTML !-->
+
+
+/* CSS */
