@@ -37,18 +37,18 @@ app = Flask(__name__)
 
 @ app.route('/')
 def home():
-    title = 'Harvestify - Home'
+    title = 'Agro Culture - Home'
     return render_template('index.html', title=title)
 
 @ app.route('/check')
 def check():
-    title = 'Harvestify - Home'
+    title = 'Agro Culture - Home'
     return render_template('dropdown.html', title=title)
 
 # render crop recommendation form page
 @ app.route('/crop-recommend')
 def crop_recommend():
-    title = 'Harvestify - Crop Recommendation'
+    title = 'Agro Culture - Crop Recommendation'
     return render_template('crop.html', title=title)
 
 
@@ -72,7 +72,7 @@ def requirement():
 # render crop recommendation result page
 @ app.route('/crop-predict', methods=['POST'])
 def crop_prediction():
-    title = 'Harvestify - Crop Recommendation'
+    title = 'Agro Culture - Crop Recommendation'
 
     if request.method == 'POST':
         N = int(request.form['nitrogen'])
@@ -95,7 +95,7 @@ def crop_prediction():
 # render crop cluster recommendation result page
 @ app.route('/crop_cluster_result', methods=['POST'])
 def crop_clustering():
-    title = 'Harvestify - Crop Clustering Recommendation'
+    title = 'Agro Culture - Crop Clustering Recommendation'
 
     if request.method == 'POST':
         crop = request.form.get("crop")
@@ -117,7 +117,7 @@ def crop_clustering():
 # render crop cluster recommendation result page
 @ app.route('/crop_requirement_result', methods=['POST'])
 def crop_requirement():
-    title = 'Harvestify - Crop Clustering Recommendation'
+    title = 'Agro Culture - Crop Clustering Recommendation'
 
     if request.method == 'POST':
         crop = request.form.get("crop")
