@@ -10,6 +10,10 @@ import config
 import pickle
 import io
 import torch
+import os
+import keras as k
+from PIL import Image
+import PIL
 from torchvision import transforms
 from PIL import Image
 from utils.model import ResNet9
@@ -25,6 +29,31 @@ crop_recommendation_data_path = 'Data/data.csv'
 # lets read the dataset
 data = pd.read_csv(crop_recommendation_data_path)
 
+# Loading plant disease classification model
+disease_classes = ['Pepper,_bell___Bacterial_spot',
+                   'Pepper,_bell___healthy',
+                   'Potato___Early_blight',
+                   'Potato___Late_blight',
+                   'Potato___healthy',
+                   'Tomato___Bacterial_spot',
+                   'Tomato___Early_blight',
+                   'Tomato___Late_blight',
+                   'Tomato___Leaf_Mold',
+                   'Tomato___Septoria_leaf_spot',
+                   'Tomato___Spider_mites Two-spotted_spider_mite',
+                   'Tomato___Target_Spot',
+                   'Tomato___Tomato_Yellow_Leaf_Curl_Virus',
+                   'Tomato___Tomato_mosaic_virus',
+                   'Tomato___healthy']
+
+MODEL_PATH = 'models/disease_selected_100.h5'
+
+disease_model = None
+if os.path.exists(MODEL_PATH):
+    disease_model = k.models.load_model(MODEL_PATH)
+    print("model found")
+else:
+    print("Model not found")
 
 # ===============================================================================================
 # ------------------------------------ FLASK APP -------------------------------------------------
@@ -57,7 +86,6 @@ def crop_recommend():
 def crop_cluster():
     title = 'Crop __________ Recommendation'
     return render_template('crop_cluster.html', title=title)
-
 
 # render crop recommendation form page
 @ app.route('/requirement')
@@ -130,7 +158,39 @@ def crop_requirement():
         for key, value in conditions.items():
             res[key] = [round(x[key].min(), 2), round(x[key].mean(), 2), round(x[key].max(), 2)]
 
-    return render_template('requirement_result.html', condition=res, crop=crop, title=title)
+    return render_template('requirement_result.html', condition=res, crop=crop, data=conditions, title=title)
+
+
+def predict_image(img, model=disease_model):
+    img = Image.open(io.BytesIO(img))
+    size = (64, 64)
+    img = img.resize(size, PIL.Image.ANTIALIAS)
+    test_image = np.expand_dims(img, axis=0)
+    result = model.predict(test_image)
+    return result
+
+
+@app.route('/disease-predict', methods=['GET', 'POST'])
+def disease_prediction():
+    title = 'Agro Culture - Disease Detection'
+
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(request.url)
+        file = request.files.get('file')
+        if not file:
+            return render_template('disease.html', title=title)
+        try:
+            img = file.read()
+
+            prediction = predict_image(img)
+            print(prediction)
+            prediction = prediction.tolist()[0]
+            prediction = disease_classes[prediction.index(max(prediction))]
+            return render_template('disease-result.html', prediction=prediction, title=title)
+        except Exception as e:
+            print(e)
+    return render_template('disease.html', title=title)
 
 
 
